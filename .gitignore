@@ -1,0 +1,7 @@
+.mayaSwatches
+.vscode
+*.pyc
+concept
+samples
+shaderHelper_ui
+versions
