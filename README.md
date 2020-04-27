@@ -5,8 +5,8 @@ Shader Helper - Maya Python Plug-In (API2)
 Simple GUI for converting legacy maya shaders to, for the time being, aiStandardSurface shaders.
 Comes with convenient functionality for selecting and editing nodes and shaders.
 <br/>
-ABOUT:
-
+<br/>
+ABOUT:<br/>
   This app was designed as answer to the mShadersToArnold.py script, which I found uncomfortable working with in big scenes.
   It implements a custom command to convert shaders with a predefined mAttribute-->aiAttribute map and
   reconnects every connection from the mShader to the aiShader.
