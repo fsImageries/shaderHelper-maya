@@ -5,11 +5,8 @@ Shader Helper - Maya Python Plug-In (API2)
 Simple GUI for converting legacy maya shaders to, for the time being, aiStandardSurface shaders.
 Comes with convenient functionality for selecting and editing nodes and shaders.
 
-INSTALLATION:
-(only tested for OSX 10.14.6 and higher, MAYA2020, Python2.7)
+INSTALLATION: 
   -open the terminal, CMD on win
-  
-  
 
 
 USAGE:
