@@ -24,13 +24,13 @@ INSTALLATION:
 
 USAGE:
 
-  -simply load the plugin after installation
+  - simply load the plugin after installation
   
-  -open the gui from the Custom or user supplied shelf
+  - open the gui from the Custom or user supplied shelf
   
-  -select legal legacy shaders
+  - select legal legacy shaders
   
-  -execute convert-selection or convert-all to get the desired shaders
+  - execute convert-selection or convert-all to get the desired shaders
   
   
  
