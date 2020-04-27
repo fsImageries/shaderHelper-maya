@@ -1,4 +1,4 @@
-# shaderHelper-maya-
+# shaderHelper-maya
 Shader Helper - Maya Python Plug-In (API2)
 
 
