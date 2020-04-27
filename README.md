@@ -9,12 +9,14 @@ INSTALLATION:
   - open the terminal, CMD on win
   
   - enter python and the path to install.py
+    -default: `python install.py`
   
   
     -optional, `python install.py path/to/the/desired/mayaPref`   eg:`/Users/user/Library/Preferences/Autodesk/maya/2020`
     
     
-    -optional, `-s shelf_name`   enter the name of the shelf where the GUI button should be placed
+    -optional, `python install.py -s shelf_name`   
+    enter the name of the shelf where the GUI button should be placed
 
 
 USAGE:
