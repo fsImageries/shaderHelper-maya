@@ -4,14 +4,23 @@ from maya import cmds
 from PySide2 import QtCore, QtWidgets
 
 ############ CUSTOM IMPORTS ############
-from scripts.basicMayaIO import MIO_BasicIO as MIO
-from scripts import baseClasses
-from scripts import static_lib
+try:
+    # -try to import from namespace if you got the library already installed
+    from basicMayaIO import MIO_BasicIO as MIO
+    import baseClasses
+    import static_lib
+    import mahelper
+    import pyhelper
+except ImportError:
+    # -import from package if None can be found
+    from scripts.basicMayaIO import MIO_BasicIO as MIO
+    from scripts import baseClasses
+    from scripts import static_lib
+    import scripts.mahelper as mahelper
+    import scripts.pyhelper as pyhelper
 
 ############# Ui IMPORTS ###############
 from ui.shaderHelper_ui import Ui_ShaderHelper
-import scripts.mahelper as mahelper
-import scripts.pyhelper as pyhelper
 
 ####### Standard Library IMPORTS #######
 from functools import partial

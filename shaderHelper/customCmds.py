@@ -1,6 +1,13 @@
 from maya.api import OpenMaya as api2
-from scripts.basicMayaIO import MIO_BasicIO as MIO
-from scripts.baseClasses import BaseNode
+
+try:
+    # -try to import from namespace if you got the library already installed
+    from basicMayaIO import MIO_BasicIO as MIO
+    from baseClasses import BaseNode
+except ImportError:
+    # -import from package if None can be found
+    from scripts.basicMayaIO import MIO_BasicIO as MIO
+    from scripts.baseClasses import BaseNode
 
 import sys
 import traceback
