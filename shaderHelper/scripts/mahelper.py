@@ -27,7 +27,6 @@ class WorkspaceControl(object):
             uiScript ([String], optional): Python-string which should generate the Ui. 
                                            Defaults to None.
         """
-        print plugin, type(plugin)
         if not plugin:
             cmds.workspaceControl(self.name, label=label)
         else:

@@ -108,8 +108,6 @@ COLORSPACES = partial(cmds.colorManagementPrefs, q=True, inputSpaceNames=True)
 # --------------------- Helper Variables ------------------------------ #
 # --------------------------------------------------------------------- #
 
-FROM_TOOL = True
-
 AIDEFAULT = "aiStandardSurface"
 
 NON_DELETEABLES = ("lambert1", "particleCloud1",
