@@ -50,6 +50,11 @@ USAGE:
   - execute convert-selection or convert-all to get the desired shaders
   
   
- 
+ <br/>
+KNOWN-ISSUES:
+
+  - if the Ui is open when maya is closed and the plug-in isn't set to auto-loaded it won't start correctly
+  
+  - there aren't any help menus integrated yet
   
  
