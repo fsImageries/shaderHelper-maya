@@ -53,7 +53,7 @@ USAGE:
  <br/>
 KNOWN-ISSUES:
 
-  - if the Ui is open when maya is closed and the plug-in isn't set to auto-loaded it won't start correctly
+  - if the Ui is open when maya is closed and the plug-in isn't set to auto-load it won't start correctly
   
   - there aren't any help menus integrated yet
   
