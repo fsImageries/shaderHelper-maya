@@ -411,6 +411,7 @@ class MIO_BasicIO(object):
                             for src, dest in srcDestItems]
 
         with mahelper.undo_chunk():
+            print "Successfully connected:"
             for src, dest in srcDestItems:
                 print "Src: {0}, Dest: {1}".format(src, dest)
                 cmds.connectAttr(src, dest, force=force)

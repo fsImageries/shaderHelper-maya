@@ -205,6 +205,7 @@ class ShaderHelper(object):
         # -get a MItSelectionList to iterate over the nodes
         selection = MIO.get_selectionIter(selection)
 
+        # TODO -check for colorrule and mark ignoreCSFileRule when not the case
         for s in selection:
             mobj = s.getDependNode()
 
@@ -223,6 +224,68 @@ class ShaderHelper(object):
                 print "Changed {0}: {1} --> {2}".format(
                     csPlug, oldColorspace, colorspace)
 
+    def replacePlace2DNodes(self, selection=None):
+        """
+        Replace duplicated place2DNodes with a single, existing place2DNode.
+
+        It searches for the first place2DNode in either the given selection or all existing nodes
+        and reconnects the connections from every other place2DNode to the first.
+        It deletes the leftover place2DNodes. 
+
+        Args:
+            selection ([MSelectionList], optional): An api2.MSelectionList which doesn't need to hold anything. 
+                                                    Defaults to None and searches for all Nodes.
+        """
+        # -get a MItSelectionList to iterate over the nodes
+        selection = MIO.get_selectionIter(selection)
+
+        # -collect all place2DNodes from the selection
+        placeNodes = list()
+        for s in selection:
+            mobj = s.getDependNode()
+
+            if self._apiType_check(mobj=mobj, apiType=454):
+                placeNodes.append(baseClasses.BaseNode(mobj))
+
+        # -get the first place2DNode
+        first = placeNodes.pop(0)
+
+        # -get the connected filenodes from every other place2DNode
+        filenodes = (MIO.get_mobj(node) for placer in placeNodes for node in placer.connectedNodes if self._fileTexture_check(
+            mobj=MIO.get_mobj(node)))
+
+        # -get the attribute plugs from the first place2DNode that are connected to a filenode
+        connectFromPlugs = [
+            s for s, d in first.outgoingConnections for o in d if o.node().apiType() == 497]
+
+        # -get the attributes which need to be connected on the filenode
+        connectToAttrs = [o.partialName(
+            useLongNames=True) for _, d in first.outgoingConnections for o in d if self._fileTexture_check(mobj=MIO.get_mobj(o.node()))]
+
+        # -get a list of lists containing all the plugs from every filenode
+        plugs = self._build_connection_plugs(filenodes, connectToAttrs)
+
+        # -zip every the first place2DNode plugs with every other filenodes plugs
+        # -build src-dest lists to be used with multiConnect
+        connections = [zip(connectFromPlugs, p) for p in plugs]
+
+        try:
+            with mahelper.undo_chunk():
+                for conn in connections:
+                    MIO.multiConnect(conn, force=True)
+                    print "\n"
+        except Exception as e:
+            print e
+        else:
+            # -get the name of every other place2DNode and delete them
+            oldNodes = [placer.name for placer in placeNodes]
+            cmds.delete(*oldNodes)
+
+            if self.verbose:
+                print "Deleted:"
+                for n in oldNodes:
+                    print "Node: {0}".format(n)
+
     # ----------------------------------Helpers---------------------------------- #
 
     def _create_new(self, names):
@@ -239,6 +302,15 @@ class ShaderHelper(object):
         src_dest = tuple(((n, MIO.create_node(mahelper.prefix_name(n, prefix), shading=True, string=True))
                           for n in names))
         return src_dest
+
+    @staticmethod
+    def _build_connection_plugs(nodes, attrs):
+        plugs = list()
+        for n in nodes:
+            mfn = api2.MFnDependencyNode(n)
+            plugs.append([MIO.get_plug(n, mfn, attr) for attr in attrs])
+
+        return plugs
 
     @staticmethod
     def _legalType_check(**kwargs):
@@ -273,6 +345,25 @@ class ShaderHelper(object):
         """
         mobj = kwargs["mobj"]
         if mobj.apiType() == 497:
+            return True
+
+        return False
+
+    @staticmethod
+    def _apiType_check(**kwargs):
+        """
+        Check if the given node is equal to the supplied type.
+
+        Args:
+            [MObject]: mobj=MObject, node which should be checked.
+            [int]: apiType=Integer representation of the api type.
+
+        Returns:
+            [Bool]: Status if postive or not.
+        """
+        mobj = kwargs["mobj"]
+        apiType = kwargs["apiType"]
+        if mobj.apiType() == apiType:
             return True
 
         return False
@@ -468,7 +559,7 @@ class ShaderHelper_app(QtWidgets.QMainWindow, Ui_ShaderHelper):
             selection (Bool, optional): Determines if the current selection should be used. Defaults to False.
         """
         button = self.edit_radioBTN_GRP.checkedButton()
-        func = _editing_funcs[button.text().replace(" ", "")]
+        func = _editing_funcs[button.text().replace(" ", "").lower()]
 
         kwargs = {}
         if selection:
@@ -536,5 +627,6 @@ class ShaderHelper_app(QtWidgets.QMainWindow, Ui_ShaderHelper):
 _selection_funcs = {0: ShaderHelper.get_nonACESTextureNodes}
 
 # -used to determine which editing function should be called
-_editing_funcs = {"renameFileTextures": ShaderHelper.renameFileNodesToFileNames,
-                  "changeColorspace": ShaderHelper.changeColorspace}
+_editing_funcs = {"renamefiletextures": ShaderHelper.renameFileNodesToFileNames,
+                  "changecolorspace": ShaderHelper.changeColorspace,
+                  "replaceplace2dnodes": ShaderHelper.replacePlace2DNodes}

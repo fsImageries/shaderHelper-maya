@@ -27,6 +27,7 @@ class BaseNode(object):
             self.connections, incoming=True)
         self.outgoingConnections = MIO.get_connectedTo_plugs(
             self.connections, incoming=False)
+        self.connectedNodes = self.get_connectedNodes()
 
     def __str__(self):
         return self.name
@@ -43,6 +44,21 @@ class BaseNode(object):
             [MPlug]: Returns the wanted plug.
         """
         return MIO.get_plug(self.mobject, self.nodeMfn, attrName)
+
+    def get_connectedNodes(self):
+        nodes = set()
+
+        for _, d in self.outgoingConnections:
+            for p in d:
+                name = api2.MFnDependencyNode(p.node()).name()
+                nodes.add(name)
+
+        for s, _ in self.incomingConnections:
+            for p in s:
+                name = api2.MFnDependencyNode(p.node()).name()
+                nodes.add(name)
+
+        return nodes
 
     # ----------------------------------Converting Methods---------------------------------- #
 

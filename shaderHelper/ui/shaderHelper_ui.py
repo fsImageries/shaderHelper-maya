@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file '/Users/joshua/Desktop/maya_python/shaderHelper/shaderHelper_ui/shaderHelper_base1.ui',
 # licensing of '/Users/joshua/Desktop/maya_python/shaderHelper/shaderHelper_ui/shaderHelper_base1.ui' applies.
 #
-# Created: Thu Apr 16 22:54:42 2020
+# Created: Fri May 22 14:22:07 2020
 #      by: pyside2-uic  running on PySide2 5.12.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -150,23 +150,26 @@ class Ui_ShaderHelper(object):
         self.editAll_BTN = QtWidgets.QPushButton(self.t3_editing)
         self.editAll_BTN.setObjectName("editAll_BTN")
         self.t3_gridLayout.addWidget(self.editAll_BTN, 0, 1, 1, 1)
+        self.changeColorSpace_radioBTN = QtWidgets.QRadioButton(self.t3_editing)
+        self.changeColorSpace_radioBTN.setObjectName("changeColorSpace_radioBTN")
+        self.t3_gridLayout.addWidget(self.changeColorSpace_radioBTN, 3, 0, 1, 1)
+        self.renameFileTextures_radioBTN = QtWidgets.QRadioButton(self.t3_editing)
+        self.renameFileTextures_radioBTN.setChecked(True)
+        self.renameFileTextures_radioBTN.setObjectName("renameFileTextures_radioBTN")
+        self.t3_gridLayout.addWidget(self.renameFileTextures_radioBTN, 2, 0, 1, 1)
         self.t3_line1 = QtWidgets.QFrame(self.t3_editing)
         self.t3_line1.setFrameShadow(QtWidgets.QFrame.Raised)
         self.t3_line1.setFrameShape(QtWidgets.QFrame.HLine)
         self.t3_line1.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.t3_line1.setObjectName("t3_line1")
         self.t3_gridLayout.addWidget(self.t3_line1, 1, 0, 1, 2)
-        self.renameFileTextures_radioBTN = QtWidgets.QRadioButton(self.t3_editing)
-        self.renameFileTextures_radioBTN.setChecked(True)
-        self.renameFileTextures_radioBTN.setObjectName("renameFileTextures_radioBTN")
-        self.t3_gridLayout.addWidget(self.renameFileTextures_radioBTN, 2, 0, 1, 1)
-        self.changeColorSpace_radioBTN = QtWidgets.QRadioButton(self.t3_editing)
-        self.changeColorSpace_radioBTN.setObjectName("changeColorSpace_radioBTN")
-        self.t3_gridLayout.addWidget(self.changeColorSpace_radioBTN, 3, 0, 1, 1)
         self.colorSpace_comboBox = QtWidgets.QComboBox(self.t3_editing)
         self.colorSpace_comboBox.setEnabled(True)
         self.colorSpace_comboBox.setObjectName("colorSpace_comboBox")
         self.t3_gridLayout.addWidget(self.colorSpace_comboBox, 3, 1, 1, 1)
+        self.replace2DNode_BTN = QtWidgets.QRadioButton(self.t3_editing)
+        self.replace2DNode_BTN.setObjectName("replace2DNode_BTN")
+        self.t3_gridLayout.addWidget(self.replace2DNode_BTN, 4, 0, 1, 1)
         self.main_tabWidget.addTab(self.t3_editing, "")
         self.gridLayout.addWidget(self.main_tabWidget, 0, 0, 1, 1)
         ShaderHelper.setCentralWidget(self.centralwidget)
@@ -196,7 +199,7 @@ class Ui_ShaderHelper(object):
         self.menubar.addAction(self.options_menu.menuAction())
 
         self.retranslateUi(ShaderHelper)
-        self.main_tabWidget.setCurrentIndex(0)
+        self.main_tabWidget.setCurrentIndex(2)
         self.searchAction_comboBox.setCurrentIndex(-1)
         QtCore.QMetaObject.connectSlotsByName(ShaderHelper)
 
@@ -207,7 +210,7 @@ class Ui_ShaderHelper(object):
         self.search_lineEdit.setToolTip(QtWidgets.QApplication.translate("ShaderHelper", "Keywords seperated by comma.", None, -1))
         self.searchBy_comboBox.setToolTip(QtWidgets.QApplication.translate("ShaderHelper", "Search mode by which the resulting node is retrieved.", None, -1))
         self.searchBy_comboBox.setItemText(0, QtWidgets.QApplication.translate("ShaderHelper", "Nodes", None, -1))
-        self.searchBy_comboBox.setItemText(1, QtWidgets.QApplication.translate("ShaderHelper", "File Textures Names", None, -1))
+        self.searchBy_comboBox.setItemText(1, QtWidgets.QApplication.translate("ShaderHelper", "File Textures", None, -1))
         self.searchBy_comboBox.setItemText(2, QtWidgets.QApplication.translate("ShaderHelper", "Colorspaces", None, -1))
         self.searchBy_label.setText(QtWidgets.QApplication.translate("ShaderHelper", "Search by:", None, -1))
         self.searchAction_label.setText(QtWidgets.QApplication.translate("ShaderHelper", "Search Action:", None, -1))
@@ -224,9 +227,14 @@ class Ui_ShaderHelper(object):
         self.main_tabWidget.setTabText(self.main_tabWidget.indexOf(self.t2_conversion), QtWidgets.QApplication.translate("ShaderHelper", "Conversion", None, -1))
         self.editSelection_BTN.setText(QtWidgets.QApplication.translate("ShaderHelper", "Edit Selection", None, -1))
         self.editAll_BTN.setText(QtWidgets.QApplication.translate("ShaderHelper", "Edit All", None, -1))
+        self.changeColorSpace_radioBTN.setToolTip(QtWidgets.QApplication.translate("ShaderHelper", "Change the colorspace of all or selected file texture nodes.", None, -1))
+        self.changeColorSpace_radioBTN.setText(QtWidgets.QApplication.translate("ShaderHelper", "Change Colorspace", None, -1))
         self.renameFileTextures_radioBTN.setToolTip(QtWidgets.QApplication.translate("ShaderHelper", "Rename FileTexture Nodes to there FileTexture Names.", None, -1))
-        self.renameFileTextures_radioBTN.setText(QtWidgets.QApplication.translate("ShaderHelper", "rename FileTextures", None, -1))
-        self.changeColorSpace_radioBTN.setText(QtWidgets.QApplication.translate("ShaderHelper", "change Colorspace", None, -1))
+        self.renameFileTextures_radioBTN.setText(QtWidgets.QApplication.translate("ShaderHelper", "Rename FileTextures", None, -1))
+        self.replace2DNode_BTN.setToolTip(QtWidgets.QApplication.translate("ShaderHelper", "Replace all or selected place2D nodes with\n"
+"the first it finds or that you selected.\n"
+"Deletes leftover place2D nodes.", None, -1))
+        self.replace2DNode_BTN.setText(QtWidgets.QApplication.translate("ShaderHelper", "Replace place2DNodes", None, -1))
         self.main_tabWidget.setTabText(self.main_tabWidget.indexOf(self.t3_editing), QtWidgets.QApplication.translate("ShaderHelper", "Editing", None, -1))
         self.help_menu.setTitle(QtWidgets.QApplication.translate("ShaderHelper", "Help", None, -1))
         self.options_menu.setTitle(QtWidgets.QApplication.translate("ShaderHelper", "Options", None, -1))
