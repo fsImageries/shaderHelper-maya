@@ -92,7 +92,7 @@ def get_shelf(mayaPref, shelfname):
 
     if not os.path.isfile(shelfpath):
         if _write_to_file(shelfpath, EMPTY_SHELF.format(shelfname)):
-            print "Successfully created: 'shelf_{}.mel'".format(shelfname)
+            print("Successfully created: 'shelf_{}.mel'".format(shelfname))
 
     return shelfpath
 
@@ -181,13 +181,12 @@ def set_files(basepath, plugin_path, package):
     plugin_file = get_joined(basepath, "{0}.py".format(package))
 
     if os.path.exists(package_path):
-        print "\n'{0}'- already exists.".format(package_path)
+        print("\n'{0}'- already exists.".format(package_path))
 
         # -simple loop that asks for Y/N, goes on indefinite if no corret answer is given
         # -if Y, delete the folder with all its contents
         while True:
-            choice = str(
-                raw_input("Delete folder: {0}? Y/N: ")).lower().strip()
+            choice = str(input("Delete folder: {0}? Y/N: ")).lower().strip()
 
             if choice == "y":
                 shutil.rmtree(package_path)
@@ -203,7 +202,7 @@ def set_files(basepath, plugin_path, package):
             plugin_path, "{0}.py".format(package)))
     except Exception as e:
         shutil.rmtree(package_path)
-        print e.message
+        print(e.message)
         return False
     else:
         return True
@@ -246,7 +245,7 @@ def _write_to_file(path, content):
         with open(path, "w+") as f:
             f.writelines(content)
     except Exception as e:
-        print e.message
+        print(e.message)
         return False
     else:
         return True
@@ -267,39 +266,39 @@ def main(mayaEnv, plugin_path, basepath, package):
             set_shelf()
 
     except Exception as e:
-        print "Something went wrong:"
-        print e.message
+        print("Something went wrong:")
+        print(e.message)
 
         if "env_res" not in locals():
             env_res = False
         if "files_res" not in locals():
             files_res = False
     finally:
-        print "\n"
+        print("\n")
 
         if env_res:
             width = len(max(VARIABLES))
 
-            print "Successfully edited Maya.env."
+            print("Successfully edited Maya.env.")
             for v in VARIABLES:
-                print "\t==>{0:<<{width}}- was edited".format(v, width=width)
+                print("\t==>{0:<<{width}}- was edited".format(v, width=width))
         else:
-            print "Couldn't edit Maya.env."
+            print("Couldn't edit Maya.env.")
 
-        print "\n"
+        print("\n")
 
         if files_res:
-            print "Successfully copied ShaderHelper folder and plugin."
-            print "\t==>{0}\n\tcopied to -->\n\t==>{1}\n".format(
-                basepath, get_joined(plugin_path, package))
-            print "\t==>{0}\n\tcopied to -->\n\t==>{1}\n".format(
-                get_joined(basepath, "{0}.py".format(package)), get_joined(plugin_path, "{0}.py".format(package)))
+            print("Successfully copied ShaderHelper folder and plugin.")
+            print("\t==>{0}\n\tcopied to -->\n\t==>{1}\n".format(
+                basepath, get_joined(plugin_path, package)))
+            print("\t==>{0}\n\tcopied to -->\n\t==>{1}\n".format(
+                get_joined(basepath, "{0}.py".format(package)), get_joined(plugin_path, "{0}.py".format(package))))
 
         elif files_res is None:
-            print "ShaderHelper already in place at:\n{0}".format(
-                get_joined(plugin_path, package))
+            print("ShaderHelper already in place at:\n{0}".format(
+                get_joined(plugin_path, package)))
         else:
-            print "Couldn't install shaderHelper."
+            print("Couldn't install shaderHelper.")
 
 
 # --------------------------__main__ block ---------------------------- #
