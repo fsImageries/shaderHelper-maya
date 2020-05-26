@@ -23,7 +23,7 @@ _selection_funcs[n'th_index] = desired_function
 <br/>
 INSTALLATION:
 
-(only tested in OSX 10.14.6, Maya2020)
+(only tested in OSX 10.14.6, Maya2020, python2.7.16)
   
   - open the terminal, CMD on win
   
@@ -37,7 +37,16 @@ INSTALLATION:
     
     -optional, `python install.py -s shelf_name`   
     enter the name of the shelf where the GUI button should be placed
+  
+  or
+  - copy shaderHelper (folder) and shaderHelper.py to your maya preferences/plug-ins folder
+    e.g.: /user/'username'/Library/Preferences/Autodesk/maya/2020/plug-ins
+  
+  - add the shaderHelper path to PYTHONPATH
+    e.g.: PYTHONPATH = /Users/'username'/Library/Preferences/Autodesk/maya/2020/plug-ins/shaderHelper
+       or PYTHONPATH = /already/existing/paths;/your/path/to/shaderHelper
 
+   
 <br/>
 USAGE:
 
