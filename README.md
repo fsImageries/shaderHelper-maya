@@ -23,7 +23,7 @@ _selection_funcs[n'th_index] = desired_function
 <br/>
 INSTALLATION:
 
-(only tested in OSX 10.14.6, Maya2020, python2.7.16)
+(only tested in OSX 10.14.6, Maya2020, python2.7.16 & 3.8.3)
   
   - open the terminal, CMD on win
   
