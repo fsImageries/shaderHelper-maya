@@ -6,6 +6,7 @@ import os
 import re
 import static_lib
 import mahelper
+import pyhelper
 
 
 # --------------------------- Basic Maya IO --------------------------- #
@@ -161,7 +162,7 @@ class MIO_BasicIO(object):
         if not selection:
             # -return a api2.MItDependencyNodes iterator, which holds all dependency nodes
             #   when no selection is given
-            return MIO_MIterDependNodes()
+            return _MIO_MIterDependNodes()
 
         return api2.MItSelectionList(selection)
 
@@ -196,14 +197,19 @@ class MIO_BasicIO(object):
         asDst = incoming
         asSrc = False if incoming else True
 
-        newList = []
-        for p in connections:
-            connectedTo = p.connectedTo(asDst, asSrc)
-            if connectedTo:
-                if incoming:
-                    newList.append((connectedTo, p))
-                else:
-                    newList.append((p, connectedTo))
+        connectedTo = [(p.connectedTo(asDst, asSrc), p)
+                       for p in connections if p.connectedTo(asDst, asSrc)]
+
+        length = len(connectedTo)
+        if length <= 0:
+            return tuple()
+
+        newList = _Connections(len(connectedTo), incoming=incoming)
+        for i, p in enumerate(connectedTo):
+            if incoming:
+                newList[i] = pyhelper.Array((p[0], p[1]))
+            else:
+                newList[i] = pyhelper.Array((p[1], p[0]))
 
         return newList
 
@@ -862,11 +868,11 @@ _numericDataTypes_functions = {
 }
 
 
-# ---------------------- Overridden API Classes ----------------------- #
+# ------------------------ Overridden Classes ------------------------- #
 # --------------------------------------------------------------------- #
 
 
-class MIO_MIterDependNodes(api2.MItDependencyNodes):
+class _MIO_MIterDependNodes(api2.MItDependencyNodes):
     """
     Convenient Class that impliments the getDependNode function missing from MItDependencyNodes.
     It returns the result of thisNode(), the mobject of the node.
@@ -876,3 +882,31 @@ class MIO_MIterDependNodes(api2.MItDependencyNodes):
 
     def getDependNode(self):
         return self.thisNode()
+
+
+class _Connections(pyhelper.Array):
+    """
+    Convenient Class for easy connection printing/debugging.
+
+    Gets called with the connections list/array and 
+    'incom' argument to determine if there are 
+    incoming or outgoing connections.
+    """
+
+    def __init__(self, size, incoming):
+        # -init with True or False for incom/outgoing
+        self.incom = incoming
+        # -pass array to the pyhelper.Array constructor.
+        super(_Connections, self).__init__(size)
+
+    def __str__(self):
+        # -determine connection type
+        res = """{0}:\n""".format("Incoming" if self.incom else "Outgoing")
+
+        # -loop over elements in the array and get the names of the attribute plugs
+        for src, dest in self._elements:
+            res = res + "%s --> %s\n" % (
+                [str(plug) for plug in src] if hasattr(
+                    src, "__getitem__") else [str(src)],
+                [str(plug) for plug in dest] if hasattr(dest, "__getitem__") else [str(dest)])
+        return res

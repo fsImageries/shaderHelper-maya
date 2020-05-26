@@ -31,6 +31,7 @@ class ShaderHelper(object):
     def __init__(self):
         self.convTo = None
         self.verbose = False
+        self.defaultColorSpace = None
 
     # ----------------------------------Selection---------------------------------- #
 
@@ -205,7 +206,6 @@ class ShaderHelper(object):
         # -get a MItSelectionList to iterate over the nodes
         selection = MIO.get_selectionIter(selection)
 
-        # TODO -check for colorrule and mark ignoreCSFileRule when not the case
         for s in selection:
             mobj = s.getDependNode()
 
@@ -219,6 +219,10 @@ class ShaderHelper(object):
             oldColorspace = MIO.get_plugValue(csPlug)
 
             MIO.set_plugValue(csPlug, colorspace)
+
+            if self.defaultColorSpace != colorspace:
+                csrulePlug = node.get_plugFrStr("ignoreColorSpaceFileRules")
+                MIO.set_plugValue(csrulePlug, 1)
 
             if self.verbose:
                 print "Changed {0}: {1} --> {2}".format(
@@ -251,23 +255,23 @@ class ShaderHelper(object):
         first = placeNodes.pop(0)
 
         # -get the connected filenodes from every other place2DNode
-        filenodes = (MIO.get_mobj(node) for placer in placeNodes for node in placer.connectedNodes if self._fileTexture_check(
-            mobj=MIO.get_mobj(node)))
+        filenodes = pyhelper.Array([MIO.get_mobj(node) for placer in placeNodes for node in placer.connectedNodes if self._fileTexture_check(
+            mobj=MIO.get_mobj(node))])
 
         # -get the attribute plugs from the first place2DNode that are connected to a filenode
-        connectFromPlugs = [
-            s for s, d in first.outgoingConnections for o in d if o.node().apiType() == 497]
+        connectFromPlugs = pyhelper.Array([
+            s for s, d in first.outgoingConnections for o in d if o.node().apiType() == 497])
 
         # -get the attributes which need to be connected on the filenode
-        connectToAttrs = [o.partialName(
-            useLongNames=True) for _, d in first.outgoingConnections for o in d if self._fileTexture_check(mobj=MIO.get_mobj(o.node()))]
+        connectToAttrs = pyhelper.Array([o.partialName(
+            useLongNames=True) for _, d in first.outgoingConnections for o in d if self._fileTexture_check(mobj=MIO.get_mobj(o.node()))])
 
         # -get a list of lists containing all the plugs from every filenode
         plugs = self._build_connection_plugs(filenodes, connectToAttrs)
 
         # -zip every the first place2DNode plugs with every other filenodes plugs
         # -build src-dest lists to be used with multiConnect
-        connections = [zip(connectFromPlugs, p) for p in plugs]
+        connections = pyhelper.Array([zip(connectFromPlugs, p) for p in plugs])
 
         try:
             with mahelper.undo_chunk():
@@ -278,7 +282,7 @@ class ShaderHelper(object):
             print e
         else:
             # -get the name of every other place2DNode and delete them
-            oldNodes = [placer.name for placer in placeNodes]
+            oldNodes = pyhelper.Array([placer.name for placer in placeNodes])
             cmds.delete(*oldNodes)
 
             if self.verbose:
@@ -305,10 +309,12 @@ class ShaderHelper(object):
 
     @staticmethod
     def _build_connection_plugs(nodes, attrs):
-        plugs = list()
-        for n in nodes:
+        plugs = pyhelper.Array(len(nodes))
+        for i, n in enumerate(nodes):
             mfn = api2.MFnDependencyNode(n)
-            plugs.append([MIO.get_plug(n, mfn, attr) for attr in attrs])
+            plugs[i] = pyhelper.Array(
+                [MIO.get_plug(n, mfn, attr) for attr in attrs])
+            #plugs.append([MIO.get_plug(n, mfn, attr) for attr in attrs])
 
         return plugs
 
@@ -619,6 +625,10 @@ class ShaderHelper_app(QtWidgets.QMainWindow, Ui_ShaderHelper):
 
         for cs in static_lib.COLORSPACES():
             self.colorSpace_comboBox.addItem(cs)
+
+        defaultRule = cmds.colorManagementFileRules(lsr=True)[0]
+        self.logic.defaultColorSpace = cmds.colorManagementFileRules(
+            defaultRule, query=True, cs=True)
 
 
 # ShaderHelper_app Switch-Case dictionaries

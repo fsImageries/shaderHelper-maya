@@ -3,6 +3,7 @@ from os.path import split, splitext
 from time import time
 from contextlib import contextmanager
 
+import ctypes
 
 try:
     from os import scandir
@@ -11,6 +12,155 @@ except ImportError:
         from scandir import scandir
     except ImportError:
         scandir = None
+
+
+# -------------------------- Custom Classes --------------------------- #
+# --------------------------------------------------------------------- #
+
+class Array(object):
+    """
+    Simple Array class, implimenting the ctypes.py_object.
+    Used for lists where the given number of items aren't changing.
+
+    Args:
+        size ([int, iterable]): Can either be a number from which the size of the array will be determined
+                                or a iterable from which the array will be build.
+    """
+
+    def __init__(self, size):
+        # TODO implement Generator
+        iterObj = None
+        try:
+            iter(size)
+        except TypeError:
+            if size < 1 or not isinstance(size, int):
+                raise ValueError("Size must be an int and bigger than 0.")
+        else:
+            iterObj = size
+            size = len(iterObj)
+
+        self._size = size
+        # -create the array structure using the ctypes module
+        objArray = ctypes.py_object * size
+        self._elements = objArray()
+
+        # -initialize each element
+        if iterObj:
+            self._fromIter(iterObj)
+        else:
+            self.clear()
+
+    def __len__(self):
+        """
+        Return the size of the array.
+
+        Returns:
+            [Int]: Size of the array.
+        """
+        return self._size
+
+    def __getitem__(self, index):
+        """
+        Return the item at a given index in the array.
+
+        Args:
+            index ([Int]): Index.
+
+        Raises:
+            ValueError: If index is smaller/equals 0 or bigger than the array size.
+
+        Returns:
+            [type]: Object held at the given index.
+        """
+
+        res = self._index_check(index)
+        if res:
+            raise IndexError(res)
+
+        return self._elements[index]
+
+    def __setitem__(self, index, value):
+        """
+        Set the item at a given index in the array.
+
+        Args:
+            index ([Int]): Index.
+            value ([type]): Object that should be assigned.
+
+        Raises:
+            ValueError: If index is smaller/equals 0 or bigger than the array size.
+        """
+        res = self._index_check(index)
+        if res:
+            raise IndexError(res)
+
+        self._elements[index] = value
+
+    def __iter__(self):
+        """
+        Returns a generator object which can be iterated over.
+
+        Returns:
+            [Generator]: Holds the objects of the array.
+        """
+        return self._arrayGenerator()
+
+    def __str__(self):
+        msg = "[{0}]".format(
+            ", ".join([str(self._elements[i]) for i in range(len(self))]))
+        return msg
+
+    def clear(self, value=None):
+        for i in range(len(self)):
+            self._elements[i] = value
+
+    # ----------------------------------Helpers---------------------------------- #
+
+    def _arrayGenerator(self):
+        """
+        Replaces the need for a Iterator-Class.
+        Returns a generator Object which hold the currently indexed item.
+
+        Yields:
+            [type]: The Object at a given index.
+        """
+        curIdx = 0
+        while curIdx < len(self._elements):
+            yield self._elements[curIdx]
+            curIdx += 1
+
+    def _index_check(self, index):
+        """
+        Check if the given index or slice is valid.
+
+        Args:
+            index ([int, slice]): Given indecies.
+
+        Returns:
+            [string, None]: Returns a error message if index is invalid else None.
+        """
+        if isinstance(index, slice):
+            if (abs(index.start) or abs(index.stop)) > len(self)-1:
+                msg = "Slice indices out of range.\n{0} : {1}".format(
+                    index.start, index.stop)
+            else:
+                return None
+        elif abs(index) > len(self)-1:
+            msg = "Index out of range."
+        else:
+            return None
+
+        return msg
+
+    def _fromIter(self, iterable):
+        """
+        Initialize array with elements from a given iterable.
+
+        Args:
+            iterable ([type]): An object that can be traversed.
+        """
+        for i, obj in enumerate(iterable):
+            self._elements[i] = obj
 
 
 # --------------------- Python Helper Functions ----------------------- #

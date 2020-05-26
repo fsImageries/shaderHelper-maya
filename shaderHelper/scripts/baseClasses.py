@@ -46,6 +46,13 @@ class BaseNode(object):
         return MIO.get_plug(self.mobject, self.nodeMfn, attrName)
 
     def get_connectedNodes(self):
+        """
+        Get the names of the connected nodes, either up- or downstream.
+        Returns no duplicates.
+
+        Returns:
+            [set]: Unique names of the connected nodes.
+        """
         nodes = set()
 
         for _, d in self.outgoingConnections:
@@ -104,16 +111,6 @@ class BaseNode(object):
                 srcNode.name, attrName)
 
             return api2.MPlug()
-
-    def print_conns(self, incoming=True, conns=None):
-        if not conns:
-            conns = self.incomingConnections if incoming else self.outgoingConnections
-        print "Incoming:" if incoming else "Outgoing:"
-        for src, dest in conns:
-            print "%s --> %s" % (
-                [str(plug) for plug in src] if hasattr(
-                    src, "__getitem__") else [str(src)],
-                [str(plug) for plug in dest] if hasattr(dest, "__getitem__") else [str(dest)])
 
 
 class CustomLineEdit(QtWidgets.QLineEdit):
