@@ -43,7 +43,7 @@ INSTALLATION:
   
     e.g.: /user/'username'/Library/Preferences/Autodesk/maya/2020/plug-ins
   
-  - add the shaderHelper path to PYTHONPATH
+  - add the shaderHelper path to PYTHONPATH in maya.env (located in your maya preferences folder)
   
     e.g.: PYTHONPATH = /Users/'username'/Library/Preferences/Autodesk/maya/2020/plug-ins/shaderHelper
     
