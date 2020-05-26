@@ -9,6 +9,7 @@ import shutil
 
 OS_NAME = platform.system()
 VARIABLES = ["PYTHONPATH"]
+INPUT = raw_input if sys.version[0] == "2" else input
 
 EMPTY_SHELF = """global proc shelf_{0} () {{
     global string $gBuffStr;
@@ -186,7 +187,7 @@ def set_files(basepath, plugin_path, package):
         # -simple loop that asks for Y/N, goes on indefinite if no corret answer is given
         # -if Y, delete the folder with all its contents
         while True:
-            choice = str(input("Delete folder: {0}? Y/N: ")).lower().strip()
+            choice = str(INPUT("Delete folder: {0}? Y/N: ")).lower().strip()
 
             if choice == "y":
                 shutil.rmtree(package_path)
