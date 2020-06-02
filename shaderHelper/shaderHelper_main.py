@@ -6,18 +6,20 @@ from PySide2 import QtCore, QtWidgets
 ############ CUSTOM IMPORTS ############
 try:
     # -try to import from namespace if you got the library already installed
+    # -import from package if None can be found
     from basicMayaIO import MIO_BasicIO as MIO
     import baseClasses
     import static_lib
     import mahelper
     import pyhelper
+    import customTypes
 except ImportError:
-    # -import from package if None can be found
     from scripts.basicMayaIO import MIO_BasicIO as MIO
     from scripts import baseClasses
     from scripts import static_lib
     import scripts.mahelper as mahelper
     import scripts.pyhelper as pyhelper
+    import scripts.customTypes as customTypes
 
 ############# Ui IMPORTS ###############
 from ui.shaderHelper_ui import Ui_ShaderHelper
@@ -93,8 +95,10 @@ class ShaderHelper(object):
             new (bool, optional): Determine if new shaders should be created. Defaults to True.
 
         """
-        names = MIO.get_names(
-            api2.MGlobal.getActiveSelectionList(), self._legalType_check)
+        # -check for legalTypes and aiStandardSurface if new is disables
+        check = self._legalType_check if new else partial(
+            self._legalType_check, ai=True)
+        names = MIO.get_names(MIO.get_selection(), check=check)
 
         if not names:
             api2.MGlobal.displayError("No supported shaders selected.")
@@ -244,7 +248,7 @@ class ShaderHelper(object):
         selection = MIO.get_selectionIter(selection)
 
         # -collect all place2DNodes from the selection
-        placeNodes = list()
+        placeNodes = customTypes.LinkedList()
         for s in selection:
             mobj = s.getDependNode()
 
@@ -255,15 +259,15 @@ class ShaderHelper(object):
         first = placeNodes.pop(0)
 
         # -get the connected filenodes from every other place2DNode
-        filenodes = pyhelper.Array([MIO.get_mobj(node) for placer in placeNodes for node in placer.connectedNodes if self._fileTexture_check(
+        filenodes = customTypes.Array([MIO.get_mobj(node) for placer in placeNodes for node in placer.connectedNodes if self._fileTexture_check(
             mobj=MIO.get_mobj(node))])
 
         # -get the attribute plugs from the first place2DNode that are connected to a filenode
-        connectFromPlugs = pyhelper.Array([
+        connectFromPlugs = customTypes.Array([
             s for s, d in first.outgoingConnections for o in d if o.node().apiType() == 497])
 
         # -get the attributes which need to be connected on the filenode
-        connectToAttrs = pyhelper.Array([o.partialName(
+        connectToAttrs = customTypes.Array([o.partialName(
             useLongNames=True) for _, d in first.outgoingConnections for o in d if self._fileTexture_check(mobj=MIO.get_mobj(o.node()))])
 
         # -get a list of lists containing all the plugs from every filenode
@@ -271,7 +275,8 @@ class ShaderHelper(object):
 
         # -zip every the first place2DNode plugs with every other filenodes plugs
         # -build src-dest lists to be used with multiConnect
-        connections = pyhelper.Array([zip(connectFromPlugs, p) for p in plugs])
+        connections = customTypes.Array(
+            [zip(connectFromPlugs, p) for p in plugs])
 
         try:
             with mahelper.undo_chunk():
@@ -282,7 +287,8 @@ class ShaderHelper(object):
             print e
         else:
             # -get the name of every other place2DNode and delete them
-            oldNodes = pyhelper.Array([placer.name for placer in placeNodes])
+            oldNodes = customTypes.Array(
+                [placer.name for placer in placeNodes])
             cmds.delete(*oldNodes)
 
             if self.verbose:
@@ -309,12 +315,22 @@ class ShaderHelper(object):
 
     @staticmethod
     def _build_connection_plugs(nodes, attrs):
-        plugs = pyhelper.Array(len(nodes))
+        """
+        Build an array containing all the connected plugs on the given nodes.
+
+        Args:
+            nodes ([iterable]): Traversable sequence containing the nodes from which
+                                the connections should be retrieved.
+            attrs ([iterable]): Traversable sequence containing all the connected attributes.
+
+        Returns:
+            [Array]: Custom Array containing all the connected plugs.
+        """
+        plugs = customTypes.Array(len(nodes))
         for i, n in enumerate(nodes):
             mfn = api2.MFnDependencyNode(n)
-            plugs[i] = pyhelper.Array(
-                [MIO.get_plug(n, mfn, attr) for attr in attrs])
-            #plugs.append([MIO.get_plug(n, mfn, attr) for attr in attrs])
+            plugs[i] = customTypes.Array(
+                (MIO.get_plug(n, mfn, attr) for attr in attrs))
 
         return plugs
 
@@ -332,7 +348,8 @@ class ShaderHelper(object):
             [Bool]: Status if it can be converted.
         """
         mfn = kwargs["mfn"]
-        if mfn.typeName in static_lib.LEGALTYPES:
+        ai = "aiStandardSurface" if kwargs.get("ai") else None
+        if mfn.typeName in static_lib.LEGALTYPES or mfn.typeName == ai:
             if kwargs.get("isDefault", None):
                 return bool(mfn.name() not in static_lib.NON_DELETEABLES)
             return True

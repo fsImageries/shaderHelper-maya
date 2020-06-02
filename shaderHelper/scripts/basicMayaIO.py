@@ -7,6 +7,7 @@ import re
 import static_lib
 import mahelper
 import pyhelper
+import customTypes
 
 
 # --------------------------- Basic Maya IO --------------------------- #
@@ -123,7 +124,6 @@ class MIO_BasicIO(object):
         """
         obj = plug.attribute()
         apiType = obj.apiType()
-        #print obj.apiTypeStr
 
         try:
             apiFunc = _plugType_functions[apiType][0]
@@ -167,19 +167,6 @@ class MIO_BasicIO(object):
         return api2.MItSelectionList(selection)
 
     @staticmethod
-    def get_fileNameFromPath(filepath):
-        """
-        Get the file name without extension from a file path.
-
-        Args:
-            filepath ([String]): Path to desired file.
-
-        Returns:
-            [String]: File name without extension.
-        """
-        return os.path.splitext(os.path.basename(filepath))[0]
-
-    @staticmethod
     def get_connectedTo_plugs(connections, incoming=True):
         """
         Gets the incoming/ outgoing Attribute Plugs by looping over the Connections and
@@ -197,8 +184,8 @@ class MIO_BasicIO(object):
         asDst = incoming
         asSrc = False if incoming else True
 
-        connectedTo = [(p.connectedTo(asDst, asSrc), p)
-                       for p in connections if p.connectedTo(asDst, asSrc)]
+        connectedTo = customTypes.LinkedList(((p.connectedTo(asDst, asSrc), p)
+                       for p in connections if p.connectedTo(asDst, asSrc)))
 
         length = len(connectedTo)
         if length <= 0:
@@ -207,9 +194,9 @@ class MIO_BasicIO(object):
         newList = _Connections(len(connectedTo), incoming=incoming)
         for i, p in enumerate(connectedTo):
             if incoming:
-                newList[i] = pyhelper.Array((p[0], p[1]))
+                newList[i] = customTypes.Array((p[0], p[1]))
             else:
-                newList[i] = pyhelper.Array((p[1], p[0]))
+                newList[i] = customTypes.Array((p[1], p[0]))
 
         return newList
 
@@ -234,7 +221,7 @@ class MIO_BasicIO(object):
         """
         sel = cls.get_selectionIter(selection)
 
-        names = []
+        names = customTypes.LinkedList()
         for s in sel:
             mobj = s.getDependNode()
             mfn = api2.MFnDependencyNode(mobj)
@@ -266,7 +253,7 @@ class MIO_BasicIO(object):
         except RuntimeError:
             return None
 
-        return cls.get_fileNameFromPath(filePlug.asString())
+        return pyhelper.filenameFromPath(filePlug.asString())
 
     @classmethod
     def get_colorSpace(cls, mobj, mfn):
@@ -358,7 +345,6 @@ class MIO_BasicIO(object):
         """
         obj = plug.attribute()
         apiType = obj.apiType()
-        #print obj.apiTypeStr
 
         try:
             apiFunc = _plugType_functions[apiType][1]
@@ -413,8 +399,8 @@ class MIO_BasicIO(object):
             return
 
         if not isinstance(srcDestItems[0][0], str):
-            srcDestItems = [(str(src), str(dest))
-                            for src, dest in srcDestItems]
+            srcDestItems = ((str(src), str(dest))
+                            for src, dest in srcDestItems)
 
         with mahelper.undo_chunk():
             print "Successfully connected:"
@@ -721,7 +707,7 @@ class MIO_Plugs(object):
 
     @staticmethod
     def set_kNumeric(plug, value):
-        # all of kthe dynamic mental ray attributes fail here, but i have no idea why they are numeric attrs and not message attrs.
+        # all of the dynamic mental ray attributes fail here, but i have no idea why they are numeric attrs and not message attrs.
         # cmds.getAttr returns None, so we will too.
         try:
             dataObj = plug.asMObject()
@@ -884,7 +870,7 @@ class _MIO_MIterDependNodes(api2.MItDependencyNodes):
         return self.thisNode()
 
 
-class _Connections(pyhelper.Array):
+class _Connections(customTypes.Array):
     """
     Convenient Class for easy connection printing/debugging.
 
@@ -896,7 +882,7 @@ class _Connections(pyhelper.Array):
     def __init__(self, size, incoming):
         # -init with True or False for incom/outgoing
         self.incom = incoming
-        # -pass array to the pyhelper.Array constructor.
+        # -pass array to the customTypes.Array constructor.
         super(_Connections, self).__init__(size)
 
     def __str__(self):

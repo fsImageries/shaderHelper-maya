@@ -4,10 +4,12 @@ try:
     # -try to import from namespace if you got the library already installed
     from basicMayaIO import MIO_BasicIO as MIO
     from baseClasses import BaseNode
+    import customTypes as ct
 except ImportError:
     # -import from package if None can be found
     from scripts.basicMayaIO import MIO_BasicIO as MIO
     from scripts.baseClasses import BaseNode
+    from scripts import customTypes as ct
 
 import sys
 import traceback
@@ -35,9 +37,9 @@ class NodeConvertCmd(api2.MPxCommand):
         self.undo = True
         self.modi = api2.MDGModifier()
 
-        self.new_src_dest_items = []
-        self.old_src_dest_items = []
-        self.connected_attrs = []
+        self.new_src_dest_items = ct.LinkedList()
+        self.old_src_dest_items = ct.LinkedList()
+        self.connected_attrs = ct.LinkedList()
         self.plugs = None
 
     def doIt(self, arg_list):
@@ -146,8 +148,8 @@ class NodeConvertCmd(api2.MPxCommand):
         Returns:
             [Bool]: True if everything succeeded, else False.
         """
-        newPlugs_oldVal_items = []
-        newPlugs_newVal_items = []
+        newPlugs_oldVal_items = ct.LinkedList()
+        newPlugs_newVal_items = ct.LinkedList()
 
         try:
             mapping = self.srcNode.get_map()
@@ -201,7 +203,7 @@ class NodeConvertCmd(api2.MPxCommand):
 
         # -I append to the List with a for-loop instead of a List Comprehension
         #   because of readability
-        srcDest_plugs = []
+        srcDest_plugs = ct.LinkedList()
 
         for src, dest in srcDest_NodeConns_str:
             try:
