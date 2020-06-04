@@ -21,35 +21,35 @@ from shaderHelper_main import _selection_funcs
 _selection_funcs[n'th_index] = desired_function
 ```
 <br/>
-INSTALLATION:
+<br/>
+INSTALLATION:<br/>
+Only tested in OSX 10.14.6, Maya2020, python2.7.16 & 3.8.3.<br/>
+You have to use sudo here because mayas site-packages is in a secured folder and
+you also have to locate your mayapy executable, help at: https://knowledge.autodesk.com/support/maya/learn-explore/caas/CloudHelp/cloudhelp/2016/ENU/Maya/files/GUID-83799297-C629-48A8-BCE4-061D3F275215-htm.html.
 
-(only tested in OSX 10.14.6, Maya2020, python2.7.16 & 3.8.3)
+  First approach (mayapy pip):
   
   - open the terminal, CMD on win
   
-  - enter python and the path to install.py
-  
-    -default: `python install.py`
-  
-  
-    -optional, `python install.py path/to/the/desired/mayaPref`   eg:`/Users/user/Library/Preferences/Autodesk/maya/2020`
-    
-    
-    -optional, `python install.py -s shelf_name`   
-    enter the name of the shelf where the GUI button should be placed
-  
-  or
-  - copy shaderHelper (folder) and shaderHelper.py to your maya preferences/plug-ins folder
-  
-    e.g.: /user/'username'/Library/Preferences/Autodesk/maya/2020/plug-ins
-  
-  - add the shaderHelper path to PYTHONPATH in maya.env (located in your maya preferences folder)
-  
-    e.g.: PYTHONPATH = /Users/'username'/Library/Preferences/Autodesk/maya/2020/plug-ins/shaderHelper
-    
-       or PYTHONPATH = /already/existing/paths;/your/path/to/shaderHelper\n
+  - install from git:<br/>
+    -`sudo path/to/mayapy -m pip install git+https://github.com/fsImageries/shaderHelper-maya.git`
 
-   
+  Second approach (from source):<br/>
+  
+  - download the git repo<br/>
+    `cd into/repo`<br/>
+    `sudo path/to/mayapy -m pip install path/to/repo`<br/>
+    or<br/>
+    `sudo path/to/mayapy setup.py install`<br/>
+  
+  Third approach (copy files):<br/>
+  
+  - download the git repo
+  
+  - copy the shaderHelper_plugin package from src to a folder on your PYTHONPATH, preferably mayas site-packages
+  
+  - copy the shaderHelper.py from root to your maya preference/plug-in folder (create it if not existing)
+<br/>  
 <br/>
 USAGE:
 
