@@ -25,8 +25,8 @@ _selection_funcs[n'th_index] = desired_function
 INSTALLATION:<br/>
 Only tested in OSX 10.14.6, Maya2020, python2.7.16 & 3.8.3.<br/>
 You have to use sudo here because mayas site-packages is in a secured folder and
-you also have to locate your mayapy executable, help at: https://knowledge.autodesk.com/support/maya/learn-explore/caas/CloudHelp/cloudhelp/2016/ENU/Maya/files/GUID-83799297-C629-48A8-BCE4-061D3F275215-htm.html.
-<br/>
+you also have to locate your mayapy executable, help at: https://knowledge.autodesk.com/support/maya/learn-explore/caas/CloudHelp/cloudhelp/2016/ENU/Maya/files/GUID-83799297-C629-48A8-BCE4-061D3F275215-htm.html.<br/>
+
 
   First approach (mayapy pip):
   
