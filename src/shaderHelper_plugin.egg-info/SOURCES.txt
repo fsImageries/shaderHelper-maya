@@ -1,0 +1,15 @@
+README.md
+setup.py
+src/shaderHelper_plugin/__init__.py
+src/shaderHelper_plugin/customCmds.py
+src/shaderHelper_plugin/shaderHelper_main.py
+src/shaderHelper_plugin.egg-info/PKG-INFO
+src/shaderHelper_plugin.egg-info/SOURCES.txt
+src/shaderHelper_plugin.egg-info/dependency_links.txt
+src/shaderHelper_plugin.egg-info/requires.txt
+src/shaderHelper_plugin.egg-info/top_level.txt
+src/shaderHelper_plugin/scripts/__init__.py
+src/shaderHelper_plugin/scripts/baseClasses.py
+src/shaderHelper_plugin/scripts/static_lib.py
+src/shaderHelper_plugin/ui/__init__.py
+src/shaderHelper_plugin/ui/shaderHelper_ui.py
