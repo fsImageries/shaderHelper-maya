@@ -1,6 +1,6 @@
 import maya.api.OpenMaya as api2
 from maya import cmds, mel
-from shaderHelper.customCmds import NodeConvertCmd
+from shaderHelper_plugin.customCmds import NodeConvertCmd
 
 
 SHELF_NAME = "Custom"

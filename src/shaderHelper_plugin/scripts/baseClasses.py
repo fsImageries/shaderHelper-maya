@@ -1,7 +1,9 @@
-from basicMayaIO import MIO_BasicIO as MIO
+############# MAYA IMPORTS #############
 from maya.api import OpenMaya as api2
 from PySide2 import QtCore, QtWidgets
 
+############ CUSTOM IMPORTS ############
+from mayapyUtils.basicMayaIO import MIO_BasicIO as MIO
 import static_lib
 
 

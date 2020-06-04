@@ -1,16 +1,12 @@
+############# MAYA IMPORTS #############
 from maya.api import OpenMaya as api2
 
-try:
-    # -try to import from namespace if you got the library already installed
-    from basicMayaIO import MIO_BasicIO as MIO
-    from baseClasses import BaseNode
-    import customTypes as ct
-except ImportError:
-    # -import from package if None can be found
-    from scripts.basicMayaIO import MIO_BasicIO as MIO
-    from scripts.baseClasses import BaseNode
-    from scripts import customTypes as ct
+############ CUSTOM IMPORTS ############
+from mayapyUtils.basicMayaIO import MIO_BasicIO as MIO
+from scripts.baseClasses import BaseNode
+from mayapyUtils import customTypes as ct
 
+####### Standard Library IMPORTS #######
 import sys
 import traceback
 

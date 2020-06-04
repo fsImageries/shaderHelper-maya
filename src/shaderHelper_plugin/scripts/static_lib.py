@@ -1,7 +1,10 @@
-from contextlib import contextmanager
+############# MAYA IMPORTS #############
 from maya import cmds
 from maya.api import OpenMaya as api2
 from PySide2 import QtCore
+
+####### Standard Library IMPORTS #######
+from contextlib import contextmanager
 from functools import partial
 
 
@@ -94,6 +97,8 @@ _MAPS = (mappingLambert, mappingBlinn, mappingPhong,
 MAPS = tuple(_populate_childAttrs(m) for m in _MAPS)
 LEGALTYPES = ("lambert", "blinn", "phong", "mia_material_x_passes",
               "mia_material_x", "dielectric_material")
+NON_DELETEABLES = ("lambert1", "particleCloud1",
+                   "shaderGlow1", "standardSurface1")
 LEGALTYPES_MAPS = {typ: maps for typ, maps in zip(LEGALTYPES, MAPS)}
 
 
@@ -103,15 +108,3 @@ LEGALTYPES_MAPS = {typ: maps for typ, maps in zip(LEGALTYPES, MAPS)}
 CONVERT_TO = {"aiStandardSurface": "ai"}
 
 COLORSPACES = partial(cmds.colorManagementPrefs, q=True, inputSpaceNames=True)
-
-
-# --------------------- Helper Variables ------------------------------ #
-# --------------------------------------------------------------------- #
-
-AIDEFAULT = "aiStandardSurface"
-
-NON_DELETEABLES = ("lambert1", "particleCloud1",
-                   "shaderGlow1", "standardSurface1")
-
-APIENUM_strToNum = vars(api2.MFn)
-APIENUM_numToStr = {v: k for k, v in APIENUM_strToNum.items()}

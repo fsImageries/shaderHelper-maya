@@ -6,4 +6,5 @@ samples
 shaderHelper_ui
 unit_testing
 versions
-
+build
+dist
