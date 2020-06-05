@@ -58,7 +58,7 @@ attrs = {"name": package,
 
 #----------------------------------------------------------------------#
 
-OS_NAME = platform.system()
+OS_NAME = platform.system().lower()
 INPUT = raw_input if sys.version[0] == "2" else input
 PLUGIN = "shaderHelper.py"
 END_CARD = """Successfully installed shaderHelper.\nIf any problems occurred please let me know at github."""
@@ -96,27 +96,34 @@ def get_mayaPref(mayaPref_path=None, mayaVer=None):
             print("The given path is not valid:\n====>{0}".format(
                 mayaPref_path))
 
-        if OS_NAME == "Darwin":   # -check if macOSX is running
-            user = os.path.expanduser("~")
+        user = os.path.expanduser("~")
+
+        if OS_NAME == "darwin":   # -check if macOSX is running
             maya = "Library/Preferences/Autodesk/maya"
+            mayaPref = get_joined(user, maya)
 
-            mayaPref = os.path.join(user, maya)
+        elif OS_NAME == "windows":
+            maya = "documents/maya"
+            mayaPref = get_joined(user, maya)
+        
+        else:
+            raise OSError("{0} not supported yet.\nPlease copy the shaderHelper.py into your plug-ins folder.")
 
-            if os.path.isdir(mayaPref):
+        if os.path.isdir(mayaPref):
+            if not mayaVer:
+                lsDir = os.listdir(mayaPref)
+                gen = (l for l in lsDir if l.isdigit())
+                mayaVer = sorted(gen, reverse=True)
+
                 if not mayaVer:
-                    lsDir = os.listdir(mayaPref)
-                    gen = (l for l in lsDir if l.isdigit())
-                    mayaVer = sorted(gen, reverse=True)
+                    raise OSError(
+                        "No Valid Maya Preference version found.\n====>{0}".format(mayaPref))
+                mayaVer = mayaVer[0]
 
-                    if not mayaVer:
-                        raise OSError(
-                            "No Valid Maya Version found.\n====>{0}".format(mayaPref))
-                    mayaVer = mayaVer[0]
+            mayaPref_path = os.path.join(mayaPref, mayaVer)
 
-                mayaPref_path = os.path.join(mayaPref, mayaVer)
-
-            else:
-                raise OSError("Can't locate maya preference folder.")
+        else:
+            raise OSError("Can't locate maya preference folder.")
 
     return mayaPref_path
 
