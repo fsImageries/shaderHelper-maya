@@ -6,7 +6,7 @@ from shaderHelper_plugin.customCmds import NodeConvertCmd
 SHELF_NAME = "Custom"
 SHELF_TOOL = {
     "label": "ShaderHelper",
-    "command": "from shaderHelper_main import ShaderHelper_app\nShaderHelper_app.display()",
+    "command": "from shaderHelper_plugin.shaderHelper_main import ShaderHelper_app\nShaderHelper_app.display()",
     "annotation": "Convert legacy shaders to aiStandardSurfaces.",
     "image1": "pythonFamily.png",
     "sourceType": "python",
