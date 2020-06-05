@@ -58,6 +58,8 @@ you also have to locate your mayapy executable, help at: https://knowledge.autod
 DEPENDENCIES:
   - mayapyUtils<br/>
   https://github.com/fsImageries/mayapyUtils.git
+  - setuptools<br/>
+  https://pypi.org/project/setuptools/
 <br/>  
 <br/>
 USAGE:
