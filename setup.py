@@ -33,8 +33,10 @@ def find_version(*file_paths):
 package = "shaderHelper_plugin"
 here = os.path.abspath(os.path.dirname(__file__))
 long_description = read("README.md")
-requires = ["mayapyUtils"]
-required_links = ["enter_public_url"]
+requires = [
+    "mayapyUtils>=0.1.0"]
+required_links = [
+    "git+https://github.com/fsImageries/mayapyUtils.git#egg=mayapyUtils-0.1.0"]
 
 attrs = {"name": package,
          "version": find_version("src", package, "__init__.py"),
