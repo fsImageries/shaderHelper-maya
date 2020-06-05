@@ -5,8 +5,12 @@ import sys
 import os
 import re
 
-from setuptools import find_packages, setup
 
+try:
+    from setuptools import find_packages, setup
+except ImportError:
+    from distutils.core import setup
+    find_packages = None
 
 # Most of this setup is shamelessly copied from https://github.com/robertjoosten mayapip setup.py.
 # Thanks nonetheless :*
@@ -33,6 +37,7 @@ def find_version(*file_paths):
 package = "shaderHelper_plugin"
 here = os.path.abspath(os.path.dirname(__file__))
 long_description = read("README.md")
+packages = ['shaderHelper_plugin', 'shaderHelper_plugin.ui', 'shaderHelper_plugin.scripts']
 requires = [
     "mayapyUtils>=0.1.0"]
 required_links = [
@@ -43,7 +48,7 @@ attrs = {"name": package,
          "author": "Farooq Singh",
          "author_email": "imageries@mail.de",
          "package_dir": {"": "src"},
-         "packages": find_packages(where="src"),
+         "packages": find_packages(where="src") if find_packages else packages,
          "install_requires": requires,
          "dependency_links": required_links,
          "license": "MIT",
