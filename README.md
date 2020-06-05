@@ -55,6 +55,11 @@ you also have to locate your mayapy executable, help at: https://knowledge.autod
   - copy the shaderHelper.py from root to your maya preference/plug-in folder (create it if not existing)
 <br/>  
 <br/>
+DEPENDENCIES:
+  - mayapyUtils
+  https://github.com/fsImageries/mayapyUtils.git
+<br/>  
+<br/>
 USAGE:
 
   - simply load the plugin after installation
