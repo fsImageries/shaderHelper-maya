@@ -39,9 +39,9 @@ here = os.path.abspath(os.path.dirname(__file__))
 long_description = read("README.md")
 packages = ['shaderHelper_plugin', 'shaderHelper_plugin.ui', 'shaderHelper_plugin.scripts']
 requires = [
-    "mayapyUtils>=0.1.0"]
+    "mayapyUtils @ https://github.com/fsImageries/mayapyUtils/tarball/master#egg=mayapyUtils-0.4.0"]
 required_links = [
-    "git+https://github.com/fsImageries/mayapyUtils.git#egg=mayapyUtils-0.1.0"]
+    "http://github.com/fsImageries/mayapyUtils/tarball/master#egg=mayapyUtils"]
 
 attrs = {"name": package,
          "version": find_version("src", package, "__init__.py"),
@@ -50,8 +50,8 @@ attrs = {"name": package,
          "package_dir": {"": "src"},
          "packages": find_packages(where="src") if find_packages else packages,
          "install_requires": requires,
-         "dependency_links": required_links,
-         "license": "MIT",
+         #"dependency_links": required_links,
+         "license": "GPL2",
          "description": "Maya-Python helper library.",
          "long_description": long_description,
          "keywords": "maya python mayapy utilities"}

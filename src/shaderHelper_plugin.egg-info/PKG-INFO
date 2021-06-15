@@ -5,7 +5,7 @@ Summary: Maya-Python helper library.
 Home-page: UNKNOWN
 Author: Farooq Singh
 Author-email: imageries@mail.de
-License: MIT
+License: GPL2
 Description: # shaderHelper-maya
         Shader Helper - Maya Python Plug-In (API2)
         
