@@ -38,13 +38,12 @@ you also have to locate your mayapy executable, help at: https://knowledge.autod
   - open the terminal, CMD on win
   
   - install from git:<br/>
-    (I was unable to succeed without the '--process-dependency-links' flag, if anybody got an idea please let me know.)
-    -`sudo path/to/mayapy -m pip install git+https://github.com/fsImageries/shaderHelper-maya.git --process-dependency-links`
+    -`sudo path/to/mayapy -m pip install git+https://github.com/fsImageries/shaderHelper-maya.git`
     <br/>or<br/>
 
   - download the git repo<br/>
       `cd into/repo`<br/>
-      `sudo path/to/mayapy -m pip install path/to/repo --process-dependency-links`<br/>
+      `sudo path/to/mayapy -m pip install path/to/repo`<br/>
   
   Third approach (copy files):<br/>
   
