@@ -7,7 +7,6 @@ from PySide2 import QtCore, QtWidgets
 # -import mayapyUtils from namespace and the rest from the package
 from mayapyUtils.basicMayaIO import MIO_BasicIO as MIO
 from mayapyUtils import mahelper
-from mayapyUtils import pyhelper
 from mayapyUtils import customTypes
 from scripts import baseClasses
 from scripts import static_lib
@@ -602,7 +601,7 @@ class ShaderHelper_app(QtWidgets.QMainWindow, Ui_ShaderHelper):
         # -if signal isn't blocked when function gets called again and comboBox
         #   isn't turned blank
         if not state and self.searchAction_comboBox.currentIndex() != -1:
-            with pyhelper.block_signals(self.searchAction_comboBox):
+            with mahelper.block_signals(self.searchAction_comboBox):
                 self.searchAction_comboBox.setCurrentIndex(-1)
 
         # -clear focus because focusChange is an event that calls this function to turn off the action comboBox

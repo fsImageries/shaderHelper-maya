@@ -16,6 +16,7 @@ except ImportError:
 # Thanks nonetheless :*
 #----------------------------------------------------------------------#
 
+
 def read(*parts):
     with codecs.open(os.path.join(here, *parts), 'r') as fp:
         return fp.read()
@@ -37,9 +38,10 @@ def find_version(*file_paths):
 package = "shaderHelper_plugin"
 here = os.path.abspath(os.path.dirname(__file__))
 long_description = read("README.md")
-packages = ['shaderHelper_plugin', 'shaderHelper_plugin.ui', 'shaderHelper_plugin.scripts']
+packages = ['shaderHelper_plugin',
+            'shaderHelper_plugin.ui', 'shaderHelper_plugin.scripts']
 requires = [
-    "mayapyUtils @ https://github.com/fsImageries/mayapyUtils/tarball/master#egg=mayapyUtils-0.4.0"]
+    "mayapyUtils @ https://github.com/fsImageries/mayapyUtils/tarball/master#egg=mayapyUtils"]
 required_links = [
     "http://github.com/fsImageries/mayapyUtils/tarball/master#egg=mayapyUtils"]
 
@@ -50,7 +52,7 @@ attrs = {"name": package,
          "package_dir": {"": "src"},
          "packages": find_packages(where="src") if find_packages else packages,
          "install_requires": requires,
-         #"dependency_links": required_links,
+         # "dependency_links": required_links,
          "license": "GPL2",
          "description": "Maya-Python helper library.",
          "long_description": long_description,
@@ -105,9 +107,10 @@ def get_mayaPref(mayaPref_path=None, mayaVer=None):
         elif OS_NAME == "windows":
             maya = "documents/maya"
             mayaPref = get_joined(user, maya)
-        
+
         else:
-            raise OSError("{0} not supported yet.\nPlease copy the shaderHelper.py into your plug-ins folder.")
+            raise OSError(
+                "{0} not supported yet.\nPlease copy the shaderHelper.py into your plug-ins folder.")
 
         if os.path.isdir(mayaPref):
             if not mayaVer:
