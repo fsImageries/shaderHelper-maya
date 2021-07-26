@@ -150,7 +150,7 @@ class ShaderHelper(object):
                               for s, d in src_dest]
                 statement = "".join(statements)
 
-                print "\n{0}".format(statement)
+                print("\n{0}").format(statement)
 
             sel = (dest for _, dest in src_dest)
             MIO.multiSelect(sel)
@@ -186,7 +186,7 @@ class ShaderHelper(object):
             cmds.rename(oldname, newname)
 
             if self.verbose:
-                print "Renamed {} --> {}.".format(oldname, newname)
+                print("Renamed {} --> {}.").format(oldname, newname)
 
     def changeColorspace(self, colorspace, selection=None):
         """
@@ -219,7 +219,7 @@ class ShaderHelper(object):
                 MIO.set_plugValue(csrulePlug, 1)
 
             if self.verbose:
-                print "Changed {0}: {1} --> {2}".format(
+                print("Changed {0}: {1} --> {2}").format(
                     csPlug, oldColorspace, colorspace)
 
     def replacePlace2DNodes(self, selection=None):
@@ -272,9 +272,9 @@ class ShaderHelper(object):
             with mahelper.undo_chunk():
                 for conn in connections:
                     MIO.multiConnect(conn, force=True)
-                    print "\n"
+                    print("\n")
         except Exception as e:
-            print e
+            print(e)
         else:
             # -get the name of every other place2DNode and delete them
             oldNodes = customTypes.Array(
@@ -282,9 +282,9 @@ class ShaderHelper(object):
             cmds.delete(*oldNodes)
 
             if self.verbose:
-                print "Deleted:"
+                print("Deleted:")
                 for n in oldNodes:
-                    print "Node: {0}".format(n)
+                    print("Node: {0}").format(n)
 
     # ----------------------------------Helpers---------------------------------- #
 
